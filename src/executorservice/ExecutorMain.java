@@ -1,6 +1,5 @@
 package executorservice;
 
-
 import exampleexecutorservice.thread.ThreadCNN;
 import exampleexecutorservice.dto.Integrant;
 import exampleexecutorservice.thread.ThreadRegister;
@@ -20,18 +19,13 @@ public class ExecutorMain {
 
     static ExecutorService service = Executors.newFixedThreadPool(4);
     static List<Callable> listTheread = new ArrayList<Callable>();
+    static List<Integrant> listIntegrante = new ArrayList<Integrant>();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        List<Integrant> listIntegrante = new ArrayList<Integrant>();
+
         dataDummy(listIntegrante);
         List<Future<Integrant>> resultList = new ArrayList<>();
-        int i = 1;
-
-        for (Integrant integranteDTO : listIntegrante) {
-            startRegister(integranteDTO, i);
-            startCNN(integranteDTO, i);
-            i++;
-        }
+        createThread();
 
         for (Callable call : listTheread) {
             Future<Integrant> resultado = service.submit(call);
@@ -39,23 +33,19 @@ public class ExecutorMain {
         }
         //service.awaitTermination(5, TimeUnit.SECONDS);
         service.shutdown();
-        while(!service.isTerminated()){
-           
+        while (!service.isTerminated()) {
+
         }
         for (Future<Integrant> future : resultList) {
 
             System.out.println("future = " + future.get().getIdentificationType() + " " + future.get().getIdentificationNumber() + " " + future.get().isApprovedRegister());
         }
-
-        
-
     }
 
     static void startRegister(Integrant integrante, int i) {
-            ThreadRegister registraduria = new ThreadRegister(integrante, i);
-            listTheread.add(registraduria);
+        ThreadRegister registraduria = new ThreadRegister(integrante, i);
+        listTheread.add(registraduria);
 
-        
     }
 
     static void startCNN(Integrant integrante, int i) {
@@ -79,6 +69,15 @@ public class ExecutorMain {
             integrant.setIdentificationNumber("12345" + String.valueOf(i));
             listIntegrante.add(integrant);
 
+        }
+    }
+
+    private static void createThread() {
+        int i = 1;
+        for (Integrant integranteDTO : listIntegrante) {
+            startRegister(integranteDTO, i);
+            startCNN(integranteDTO, i);
+            i++;
         }
     }
 }
