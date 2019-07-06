@@ -6,7 +6,6 @@
 package exampleexecutorservice.thread;
 
 import exampleexecutorservice.dto.Integrant;
-import exampleexecutorservice.dto.Result;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -14,21 +13,24 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Ericka Montero
  */
-public class ThreadFIF implements Callable<Integrant> {
+public class ThreadFIF  extends MainThread implements Callable<Integrant> {
 
-    int id;
-    Integrant integrant;
-    Result result = new Result();
-
-    public ThreadFIF(Integrant integrante, int id) {
-        this.integrant = integrante;
-        this.id = id;
+    public ThreadFIF(int id, Integrant integrant) {
+        super(id, integrant);
     }
 
     @Override
     public  Integrant call() throws Exception {
-        result = Result.getInstancia();
-        
+      integrant.getResult().put("FIF", result);
+         if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
+            result.setRespuesta(false);
+            result.setObservacion("Rechazado por cruce");
+            TimeUnit.MILLISECONDS.sleep(10000);
+        } else {
+            result.setRespuesta(true);
+        }
+        System.out.println("Finish with FIF - "+  this.id);
+
        
 
         return integrant;
