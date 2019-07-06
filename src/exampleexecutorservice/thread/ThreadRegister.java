@@ -9,22 +9,26 @@ import java.util.concurrent.TimeUnit;
  *
  * @author ezmonte
  */
-public class ThreadRegister extends MainThread implements Callable<Integrant> {
+public class ThreadRegister implements Callable<Integrant> {
 
-    public ThreadRegister(int id, Integrant integrant) {
-        super(id, integrant);
+    int id;
+    Integrant integrant;
+    Result result = new Result();
+
+    public ThreadRegister(Integrant integrante, int id) {
+        this.integrant = integrante;
+        this.id = id;
     }
 
-   
-     @Override
+    @Override
     public  Integrant call() throws Exception {
-        integrant.getResult().put("Register", result);
+        result = Result.getInstancia();
+        
         if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
-            result.setRespuesta(false);
-            result.setObservacion("Rechazado por CE");
+            integrant.setApprovedRegister(false);
             TimeUnit.MILLISECONDS.sleep(10000);
         } else {
-            result.setRespuesta(true);
+            integrant.setApprovedRegister(true);
         }
         System.out.println("Finish with register - "+  this.id);
 

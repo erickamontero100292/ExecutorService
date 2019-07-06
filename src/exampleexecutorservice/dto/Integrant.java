@@ -1,10 +1,5 @@
 package exampleexecutorservice.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  *
  * @author ezmonte
@@ -13,7 +8,8 @@ public class Integrant {
 
     private String identificationType;
     private String identificationNumber;
-    Map<String, Result> result = new ConcurrentHashMap<>();
+    private Integer registerResult;
+    private boolean approvedRegister = false;
 
     public String getIdentificationType() {
         return identificationType;
@@ -31,30 +27,28 @@ public class Integrant {
         this.identificationNumber = identificationNumber;
     }
 
-    public Map<String, Result> getResult() {
-        return result;
+    public Integer getRegisterResult() {
+        return registerResult;
     }
 
-    public void setResult(Map<String, Result> result) {
-        this.result = result;
+    public void setRegisterResult(Integer registerResult) {
+        this.registerResult = registerResult;
     }
 
-    public static List<Integrant> generateDataDummy() {
-        List<Integrant> listIntegrante = new ArrayList<Integrant>();
-        for (int i = 0; i < 20; i++) {
-
-            Integrant integrant = new Integrant();
-            if (i % 2 == 0) {
-                integrant.setIdentificationType("CI");
-            } else {
-                integrant.setIdentificationType("CE");
-            }
-
-            integrant.setIdentificationNumber("12345" + String.valueOf(i));
-            listIntegrante.add(integrant);
-
-        }
-        return listIntegrante;
+    public boolean isApprovedRegister() {
+        return approvedRegister;
     }
+
+    public void setApprovedRegister(boolean approvedRegister) {
+        this.approvedRegister = approvedRegister;
+    }
+
+    @Override
+    public String toString() {
+        return "Integrant{" + "identificationType=" + identificationType + ", identificationNumber=" + identificationNumber + ", registerResult=" + registerResult + ", approvedRegister=" + approvedRegister + '}';
+    }
+
+
+         
 
 }

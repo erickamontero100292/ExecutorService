@@ -15,20 +15,25 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Ericka Montero
  */
-public class ThreadCNN extends MainThread implements Callable<Integrant> {
+public class ThreadCNN implements Callable<Integrant> {
 
-    public ThreadCNN(int id, Integrant integrant) {
-        super(id, integrant);
+    int id;
+    Integrant integrant;
+    Result result = new Result();
+
+    public ThreadCNN(Integrant integrante, int id) {
+        this.integrant = integrante;
+        this.id = id;
     }
 
     @Override
     public Integrant call() throws Exception {
+        result = Result.getInstancia();
         Random r = new Random();
         int valorDado = r.nextInt(2000) * 3;
         try {
-            integrant.getResult().put("CNN", result);
             if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
-                result.setRespuesta(true);
+                integrant.setApprovedRegister(true);
                 TimeUnit.MILLISECONDS.sleep(1000);
                 if (integrant.getIdentificationNumber().equals("123451")) {
                     TimeUnit.MILLISECONDS.sleep(10000);
@@ -36,13 +41,12 @@ public class ThreadCNN extends MainThread implements Callable<Integrant> {
                 }
 
             } else {
-                result.setRespuesta(false);
+                integrant.setApprovedRegister(false);
             }
         } catch (Exception e) {
-            result.setRespuesta(false);
+            integrant.setApprovedRegister(false);
             TimeUnit.MILLISECONDS.sleep(10000);
             System.out.println("Finish CNN  Exception" + integrant.getIdentificationType() + " - " + this.id);
-            result.setObservacion("Error: CNN no responde");
         }
         System.out.println("Finish CNN " + integrant.getIdentificationType() + " - " + this.id);
         return integrant;
