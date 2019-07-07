@@ -23,28 +23,31 @@ public class ThreadCNN extends MainThread implements Callable<Integrant> {
 
     @Override
     public Integrant call() throws Exception {
-        Random r = new Random();
-        int valorDado = r.nextInt(2000) * 3;
         try {
-            integrant.getResult().put("CNN", result);
-            if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
-                result.setRespuesta(true);
-                TimeUnit.MILLISECONDS.sleep(1000);
-                if (integrant.getIdentificationNumber().equals("123451")) {
-                    TimeUnit.MILLISECONDS.sleep(10000);
-                    throw new Exception();
-                }
-
-            } else {
-                result.setRespuesta(false);
-            }
+            addCrossing("CNN");
+            validateInformation();
         } catch (Exception e) {
-            result.setRespuesta(false);
+            fillUpInformation(false, "Error: CNN no responde");
             TimeUnit.MILLISECONDS.sleep(10000);
             System.out.println("Finish CNN  Exception" + integrant.getIdentificationType() + " - " + this.id);
-            result.setObservacion("Error: CNN no responde");
         }
         System.out.println("Finish CNN " + integrant.getIdentificationType() + " - " + this.id);
         return integrant;
+    }
+
+    private void validateInformation() throws InterruptedException, Exception {
+
+        if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            if (integrant.getIdentificationNumber().equals("123451")) {
+                TimeUnit.MILLISECONDS.sleep(10000);
+                throw new Exception();
+            }else{
+                    fillUpInformation(false, "Error: Rechazado por CE");
+            }
+
+        } else {
+            fillUpInformation(true);
+        }
     }
 }

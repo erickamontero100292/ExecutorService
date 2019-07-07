@@ -13,7 +13,7 @@ import exampleexecutorservice.dto.Result;
  * @author Ericka Montero
  */
 public class MainThread {
-    
+
     int id;
     Integrant integrant;
     Result result = new Result();
@@ -22,8 +22,6 @@ public class MainThread {
         this.id = id;
         this.integrant = integrant;
     }
-    
-    
 
     public int getId() {
         return id;
@@ -49,6 +47,17 @@ public class MainThread {
         this.integrant = integrant;
     }
 
- 
-    
+    public void addCrossing(String crossingName) {
+        integrant.getResult().put(crossingName, result);
+    }
+
+    public void fillUpInformation(boolean value, String observation) {
+        result.setRespuesta(value);
+        result.setObservacion(observation);
+    }
+
+    public void fillUpInformation(boolean value) {
+        result.setRespuesta(value);
+
+    }
 }

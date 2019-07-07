@@ -15,20 +15,26 @@ public class ThreadRegister extends MainThread implements Callable<Integrant> {
         super(id, integrant);
     }
 
-   
-     @Override
-    public  Integrant call() throws Exception {
-        integrant.getResult().put("Register", result);
-        if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
-            result.setRespuesta(false);
-            result.setObservacion("Rechazado por CE");
-            TimeUnit.MILLISECONDS.sleep(10000);
-        } else {
-            result.setRespuesta(true);
-        }
-        System.out.println("Finish with register - "+  this.id);
+    @Override
+    public Integrant call() throws Exception {
+        addCrossing("Registre");
+        validateInformation();
+       
+        System.out.println("Finish with register - " + this.id);
 
         return integrant;
+    }
+
+
+
+    private void validateInformation() throws InterruptedException {
+        
+        if (integrant.getIdentificationType().equalsIgnoreCase("CE")) {
+            fillUpInformation(false,"Rechazado por CE");
+            TimeUnit.MILLISECONDS.sleep(10000);
+        } else {
+           fillUpInformation(true);
+        }
     }
 
 }

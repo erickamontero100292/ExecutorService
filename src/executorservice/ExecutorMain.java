@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  */
 public class ExecutorMain {
 
-    static ExecutorService service = Executors.newFixedThreadPool(4);
+    static ExecutorService service = Executors.newFixedThreadPool(10);
     static List<Callable> listTheread = new ArrayList<Callable>();
     static List<Integrant> listIntegrante = Integrant.generateDataDummy();
 
@@ -29,6 +29,7 @@ public class ExecutorMain {
         createThread();
         processThread();
         printResults();
+        
     }
 
     private static void createThread() {
